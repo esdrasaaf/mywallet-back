@@ -1,6 +1,7 @@
 import joi from 'joi'
 import bcrypt from 'bcrypt'
-import { usersCollection } from '../index.js'
+import { v4 as uuidV4} from 'uuid'
+import { sessionsCollecton, usersCollection } from '../index.js'
 
 const registerSchema = joi.object ({
     name: joi.string().required().min(3).max(100),
@@ -10,16 +11,25 @@ const registerSchema = joi.object ({
 
 export async function postSignIn (req, res) {
     const { email, password } = req.body
+    const token = uuidV4()
 
     try {
         const registeredUser = await usersCollection.findOne({ email })
-        const passEquals = bcrypt.compareSync(password, registeredUser.password)
-
-        if (!registeredUser || !passEquals) {
+        if (!registeredUser) {
             return res.status(401).send("Dados de login incorretos")
-        }       
+        }
 
-        res.sendStatus(200)
+        const passEquals = bcrypt.compareSync(password, registeredUser.password)
+        if (!passEquals) {
+            return res.status(401).send("Dados de login incorretos")
+        }
+
+        await sessionsCollecton.insertOne({
+            token,
+            userId: registeredUser._id
+        })
+
+        res.send(token)
     } catch (err) {
         console.log(err)
         res.sendStatus(500)

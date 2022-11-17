@@ -19,10 +19,13 @@ const db = mongoClient.db("myWallet")
 // Exports
 export const usersCollection = db.collection("users")
 export const registersCollection = db.collection("registers")
+export const sessionsCollecton = db.collection("sessions")
 
 // API Code
 app.post("/sign-in", postSignIn)
 
 app.post("/sign-up", postSignUp)
+
+app.get("/registers")
 
 app.listen(5000, console.log("Running on port 5000"))
