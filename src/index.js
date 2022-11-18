@@ -3,7 +3,7 @@ import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
 import { postLogout, postSignIn, postSignUp } from './controllers/authController.js'
-import { getRegisters } from './controllers/registersController.js'
+import { deleteRegister, getRegisters } from './controllers/registersController.js'
 import { postInput, postOutput } from './controllers/addsControllers.js'
 
 const app = express()
@@ -31,6 +31,8 @@ app.post("/sign-up", postSignUp)
 app.post("/logout", postLogout)
 
 app.get("/registers", getRegisters)
+
+app.delete("/registers", deleteRegister)
 
 app.post("/add-input", postInput)
 
