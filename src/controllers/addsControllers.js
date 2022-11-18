@@ -8,7 +8,7 @@ export async function postInput (req, res) {
 
     // Schema
     const bodySchema = joi.object ({
-        value: joi.string().required().min(3),
+        value: joi.string().required().min(1).max(10),
         description: joi.string().min(3).max(100).required(),
         data: joi.string().required()
     })
@@ -42,7 +42,7 @@ export async function postOutput (req, res) {
 
     // Schema
     const bodySchema = joi.object ({
-        value: joi.string().required().min(3),
+        value: joi.string().required().min(1).max(10),
         description: joi.string().min(3).max(100).required(),
         data: joi.string().required()
     })
