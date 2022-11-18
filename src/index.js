@@ -3,6 +3,8 @@ import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
 import { postSignIn, postSignUp } from './controllers/authController.js'
+import { getRegisters } from './controllers/registersController.js'
+import { postInput, postOutput } from './controllers/addsControllers.js'
 
 const app = express()
 dotenv.config()
@@ -26,6 +28,10 @@ app.post("/sign-in", postSignIn)
 
 app.post("/sign-up", postSignUp)
 
-app.get("/registers")
+app.get("/registers", getRegisters)
+
+app.post("/add-input", postInput)
+
+app.post("/add-output", postOutput)
 
 app.listen(5000, console.log("Running on port 5000"))
