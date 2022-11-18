@@ -2,9 +2,10 @@ import { registersCollection } from "../index.js"
 import joi from 'joi'
 
 export async function postInput (req, res) {
-    const register = req.body
+    const {value, description, data} = req.body
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
+    const register = { value, description, data, type: "input"}
 
     // Schema
     const bodySchema = joi.object ({
@@ -18,9 +19,9 @@ export async function postInput (req, res) {
     }
 
     try {
-        const { error } = bodySchema.validate(register, { abortEarly: false })
+        const { error } = bodySchema.validate(req.body, { abortEarly: false })
         if (error) {
-            const errors = error.details.map((d) => details.message)
+            const errors = error.details.map((d) => d.message)
             return res.status(400).send(errors)
         }
 
@@ -33,9 +34,10 @@ export async function postInput (req, res) {
 }
 
 export async function postOutput (req, res) {
-    const register = req.body
+    const {value, description, data} = req.body
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
+    const register = { value, description, data, type: "output"}
 
     // Schema
     const bodySchema = joi.object ({
@@ -49,9 +51,9 @@ export async function postOutput (req, res) {
     }
 
     try {
-        const { error } = bodySchema.validate(register, { abortEarly: false })
+        const { error } = bodySchema.validate(req.body, { abortEarly: false })
         if (error) {
-            const errors = error.details.map((d) => details.message)
+            const errors = error.details.map((d) => d.message)
             return res.status(400).send(errors)
         }
 

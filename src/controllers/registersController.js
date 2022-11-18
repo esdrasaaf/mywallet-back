@@ -9,10 +9,10 @@ export async function getRegisters (req, res) {
     }
 
     try {
-        const registers = await registersCollection.find()
+        const registers = await registersCollection.find().toArray()
         const session = await sessionsCollecton.findOne({token})
         const user = await usersCollection.findOne({_id: session.userId})
-        res.send(user)
+        res.send({user, registers})
     } catch (error) {
         console.log(error)
         res.status(500).send("Sua sessão expirou")
