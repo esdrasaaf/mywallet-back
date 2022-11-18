@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
-import { postSignIn, postSignUp } from './controllers/authController.js'
+import { postLogout, postSignIn, postSignUp } from './controllers/authController.js'
 import { getRegisters } from './controllers/registersController.js'
 import { postInput, postOutput } from './controllers/addsControllers.js'
 
@@ -27,6 +27,8 @@ export const sessionsCollection = db.collection("sessions")
 app.post("/sign-in", postSignIn)
 
 app.post("/sign-up", postSignUp)
+
+app.post("/logout", postLogout)
 
 app.get("/registers", getRegisters)
 

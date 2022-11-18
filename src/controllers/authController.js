@@ -60,3 +60,20 @@ export async function postSignUp (req, res) {
         res.sendStatus(500)
     }
 }
+
+export async function postLogout (req, res) {
+    const { authorization } = req.headers
+    const token = authorization?.replace("Bearer ", '')
+
+    if (!token) {
+        res.sendStatus(401)
+    }
+
+    try {
+        await sessionsCollection.deleteOne({token})
+        res.status(200).send("Você deslogou com sucesso!")
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Sua sessão expirou")
+    }
+}
