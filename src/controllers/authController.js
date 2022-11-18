@@ -1,7 +1,7 @@
 import joi from 'joi'
 import bcrypt from 'bcrypt'
 import { v4 as uuidV4} from 'uuid'
-import { sessionsCollecton, usersCollection } from '../index.js'
+import { sessionsCollection, usersCollection } from '../index.js'
 
 const registerSchema = joi.object ({
     name: joi.string().required().min(3).max(100),
@@ -24,7 +24,7 @@ export async function postSignIn (req, res) {
             return res.status(401).send("Dados de login incorretos")
         }
 
-        await sessionsCollecton.insertOne({
+        await sessionsCollection.insertOne({
             token,
             userId: registeredUser._id
         })
@@ -47,7 +47,7 @@ export async function postSignUp (req, res) {
 
         const { error } = registerSchema.validate(user, { abortEarly: false })
         if (error) {
-            const errors = error.details.map((d) => details.message)
+            const errors = error.details.map((d) => d.message)
             return res.status(400).send(errors)
         }
     

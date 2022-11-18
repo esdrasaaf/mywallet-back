@@ -1,11 +1,10 @@
-import { registersCollection } from "../index.js"
+import { registersCollection, sessionsCollection } from "../index.js"
 import joi from 'joi'
 
 export async function postInput (req, res) {
-    const {value, description, data} = req.body
+    const { value, description, data } = req.body
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
-    const register = { value, description, data, type: "input"}
 
     // Schema
     const bodySchema = joi.object ({
@@ -25,6 +24,9 @@ export async function postInput (req, res) {
             return res.status(400).send(errors)
         }
 
+        const session = await sessionsCollection.findOne({token})
+        const register = { value, description, data, type: "input", idx: session.userId}
+
         await registersCollection.insertOne(register)
         res.status(200).send("Registro inserido com sucesso")
     } catch (error) {
@@ -37,7 +39,6 @@ export async function postOutput (req, res) {
     const {value, description, data} = req.body
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
-    const register = { value, description, data, type: "output"}
 
     // Schema
     const bodySchema = joi.object ({
@@ -56,6 +57,9 @@ export async function postOutput (req, res) {
             const errors = error.details.map((d) => d.message)
             return res.status(400).send(errors)
         }
+
+        const session = await sessionsCollection.findOne({token})
+        const register = { value, description, data, type: "output", idx: session.userId}
 
         await registersCollection.insertOne(register)
         res.status(200).send("Registro inserido com sucesso")

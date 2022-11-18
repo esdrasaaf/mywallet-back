@@ -1,4 +1,4 @@
-import { registersCollection, usersCollection, sessionsCollecton } from "../index.js"
+import { registersCollection, usersCollection, sessionsCollection } from "../index.js"
 
 export async function getRegisters (req, res) {
     const { authorization } = req.headers
@@ -9,9 +9,9 @@ export async function getRegisters (req, res) {
     }
 
     try {
-        const registers = await registersCollection.find().toArray()
-        const session = await sessionsCollecton.findOne({token})
+        const session = await sessionsCollection.findOne({token})
         const user = await usersCollection.findOne({_id: session.userId})
+        const registers = await registersCollection.find({idx: session.userId}).toArray()
         res.send({user, registers})
     } catch (error) {
         console.log(error)

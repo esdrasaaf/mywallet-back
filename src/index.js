@@ -21,7 +21,7 @@ const db = mongoClient.db("myWallet")
 // Exports
 export const usersCollection = db.collection("users")
 export const registersCollection = db.collection("registers")
-export const sessionsCollecton = db.collection("sessions")
+export const sessionsCollection = db.collection("sessions")
 
 // API Code
 app.post("/sign-in", postSignIn)
