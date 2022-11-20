@@ -3,12 +3,6 @@ import bcrypt from 'bcrypt'
 import { v4 as uuidV4} from 'uuid'
 import { sessionsCollection, usersCollection } from '../database/db.js'
 
-const registerSchema = joi.object ({
-    name: joi.string().required().min(3).max(100),
-    email: joi.string().email().required(),
-    password: joi.string().required()
-})
-
 export async function postSignIn (req, res) {
     const { email, password } = req.body
     const token = uuidV4()
@@ -38,6 +32,12 @@ export async function postSignIn (req, res) {
 
 export async function postSignUp (req, res) {
     const user = req.body
+
+    const registerSchema = joi.object ({
+        name: joi.string().required().min(3).max(100),
+        email: joi.string().email().required(),
+        password: joi.string().required()
+    })
     
     try {
         const alreadyRegistered = await usersCollection.findOne({email: user.email})
@@ -62,13 +62,8 @@ export async function postSignUp (req, res) {
 }
 
 export async function postLogout (req, res) {
-    const { authorization } = req.headers
-    const token = authorization?.replace("Bearer ", '')
-
-    if (!token) {
-        res.sendStatus(401)
-    }
-
+    const token = req.token
+    
     try {
         await sessionsCollection.deleteOne({token})
         res.status(200).send("Você deslogou com sucesso!")

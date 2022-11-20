@@ -7,6 +7,7 @@ export default async function validateToken(req, res, next) {
     try {
         const session = await sessionsCollection.findOne({token})
         req.session = session
+        req.token = token
     } catch (error) {
         res.sendStatus(401)
     }
