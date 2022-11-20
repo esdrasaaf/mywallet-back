@@ -1,7 +1,7 @@
-import joi from 'joi'
 import bcrypt from 'bcrypt'
 import { v4 as uuidV4} from 'uuid'
 import { sessionsCollection, usersCollection } from '../database/db.js'
+import userSchema from '../models/registrationModel.js'
 
 export async function postSignIn (req, res) {
     const { email, password } = req.body
@@ -33,19 +33,13 @@ export async function postSignIn (req, res) {
 export async function postSignUp (req, res) {
     const user = req.body
 
-    const registerSchema = joi.object ({
-        name: joi.string().required().min(3).max(100),
-        email: joi.string().email().required(),
-        password: joi.string().required()
-    })
-    
     try {
         const alreadyRegistered = await usersCollection.findOne({email: user.email})
         if (alreadyRegistered) {
             return res.status(409).send("Email já cadastrado, tente outro!")
         }
 
-        const { error } = registerSchema.validate(user, { abortEarly: false })
+        const { error } = userSchema.validate(user, { abortEarly: false })
         if (error) {
             const errors = error.details.map((d) => d.message)
             return res.status(400).send(errors)

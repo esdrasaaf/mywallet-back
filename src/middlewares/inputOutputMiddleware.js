@@ -1,15 +1,8 @@
-import joi from 'joi'
+import bodySchema from "../models/addRegisterModel.js"
 
 export async function validateInput(req, res, next) {
     const { value, description, data } = req.body
     const { userId } = req.session
-
-    // Schema
-    const bodySchema = joi.object ({
-        value: joi.string().required().min(1).max(10),
-        description: joi.string().min(3).max(100).required(),
-        data: joi.string().required()
-    })
 
     try {
         const { error } = bodySchema.validate(req.body, { abortEarly: false })
@@ -29,13 +22,6 @@ export async function validateInput(req, res, next) {
 export async function validateOutput(req, res, next) {
     const {value, description, data} = req.body
     const { userId } = req.session
-
-    // Schema
-    const bodySchema = joi.object ({
-        value: joi.string().required().min(1).max(10),
-        description: joi.string().min(3).max(100).required(),
-        data: joi.string().required()
-    })
 
     try {
         const { error } = bodySchema.validate(req.body, { abortEarly: false })
