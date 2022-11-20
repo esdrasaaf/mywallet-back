@@ -1,7 +1,7 @@
 import joi from 'joi'
 import bcrypt from 'bcrypt'
 import { v4 as uuidV4} from 'uuid'
-import { sessionsCollection, usersCollection } from '../index.js'
+import { sessionsCollection, usersCollection } from '../database/db.js'
 
 const registerSchema = joi.object ({
     name: joi.string().required().min(3).max(100),

@@ -1,4 +1,4 @@
-import { registersCollection, sessionsCollection } from "../index.js"
+import { registersCollection, sessionsCollection } from "../database/db.js"
 import joi from 'joi'
 
 export async function postInput (req, res) {

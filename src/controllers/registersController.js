@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { registersCollection, usersCollection, sessionsCollection } from "../index.js"
+import { registersCollection, usersCollection, sessionsCollection } from "../database/db.js"
 
 export async function getRegisters (req, res) {
     const { authorization } = req.headers
